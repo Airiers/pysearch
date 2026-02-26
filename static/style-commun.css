@@ -1,0 +1,36 @@
+.header {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding-top: 20px;
+  padding-left: 35px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+}
+
+.mode > ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+  width: 250px;
+  padding-left: 150px;
+}
+
+a.lien {
+  color: var(--buttoncolor);
+}
+
+a.lien.active,
+a.lien:hover {
+  color: var(--textcolor);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 8px;
+}
+
+.head {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}

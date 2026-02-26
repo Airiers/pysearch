@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PySearch</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style-home.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <style>
+      body {
+        background-image: url("{{ image }}");
+        background-size: cover;
+        background-repeat: no-repeat;
+	overflow:hidden;
+      }
+    </style>
+    <div class="search">
+      <div class="icon-wrapper">
+        <a href="/">
+          <img
+            class="python-logo"
+            src="{{ url_for('static', filename='python-powered.svg') }}"
+            alt="Python Logo"
+            width="80px"
+        /></a>
+      </div>
+      <form action="/search" method="GET" class="searchbar">
+        <input
+          autocomplete="off"
+          value="{{value}}"
+          type="text"
+          name="q"
+          placeholder="Rechercher..."
+        />
+        <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+    <div class="actu">
+      <div class="bdm">
+        {% for abdm in bdm %}
+        <article>
+          <a
+            target="_blank"
+            class="infos"
+            href="{{abdm[1]}}"
+            title="{{abdm[2]}}"
+          >
+            <img class="preview" src="{{abdm[3]}}" alt="{{abdm[0]}}" />
+            <h2 class="title">{{abdm[0]}}</h2>
+          </a>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

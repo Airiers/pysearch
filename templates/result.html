@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{value}} - PySearch</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style-commun.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="head">
+      <div class="header">
+        <a href="/">
+          <img
+            class="python-logo"
+            src="{{ url_for('static', filename='python-powered.svg') }}"
+            alt="Python Logo"
+            width="80px"
+        /></a>
+        <form method="GET" class="searchbar">
+          <input
+            autocomplete="off"
+            value="{{value}}"
+            type="text"
+            name="q"
+            placeholder="Rechercher..."
+          />
+          <button type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+      </div>
+      <div class="mode">
+        <ul>
+          <li>
+            <a class="lien active" href="/search?q={{value}}">Web</a>
+          </li>
+          <li>
+            <a class="lien" href="/images?q={{value}}">Images</a>
+          </li>
+          <li>
+            <a class="lien" href="/actus?q={{value}}">Actualités</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main">
+      {% for result in results %}
+      <article>
+        <h2 title="{{ result[4] }}">
+          <div class="icon-wrapper">
+            <img alt="icon" src="{{ result[3] }}" width="30px" />
+          </div>
+          <a target="_blank" class="title" href="{{ result[1] }}"
+            >{{ result[0] }}</a
+          >
+        </h2>
+        <div class="description">
+          <a target="_blank" class="description" href="{{ result[1] }}"
+            >{{ result[2] }}</a
+          >
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </body>
+</html>

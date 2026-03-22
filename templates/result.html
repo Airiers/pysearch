@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{value}} - PySearch</title>
     <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+      type="image/x-icon"
+    />
+    <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
@@ -37,6 +42,9 @@
         margin-left: -150px;
         display: flex;
         justify-content: center;
+      }
+      .loading {
+        color: #fff;
       }
     </style>
   </head>
@@ -104,57 +112,105 @@
         </ul>
       </div>
     </div>
-    <div class="main index">
-      <div class="ddg">
-        {% for result in results_ddg %}
-        <article>
-          <h2 title="{{ result[4] }}">
-            <div class="icon-wrapper">
-              <img
-                alt="icon"
-                data-src="{{ result[3] }}"
-                width="30px"
-                loading="lazy"
-                class="lazy-logo"
-              />
-            </div>
-            <a target="_blank" class="title" href="{{ result[1] }}"
-              >{{ result[0] }}</a
-            >
-          </h2>
-          <div class="description">
-            <a target="_blank" class="description" href="{{ result[1] }}"
-              >{{ result[2] }}</a
-            >
-          </div>
-        </article>
-        {% endfor %}
-      </div>
-      <div class="bing">
-        {% for result in results_bing %}
-        <article>
-          <h2 title="{{ result[4] }}">
-            <div class="icon-wrapper">
-              <img
-                alt="icon"
-                data-src="{{ result[3] }}"
-                width="30px"
-                loading="lazy"
-                class="lazy-logo"
-              />
-            </div>
-            <a target="_blank" class="title" href="{{ result[1] }}"
-              >{{ result[0] }}</a
-            >
-          </h2>
-          <div class="description">
-            <a target="_blank" class="description" href="{{ result[1] }}"
-              >{{ result[2] }}</a
-            >
-          </div>
-        </article>
-        {% endfor %}
-      </div>
+    <div id="loading-indicator" class="loading">
+      <div class="spinner"></div>
+      <p>Recherche en cours...</p>
     </div>
+    <div class="main index" id="results-container" style="display: none">
+      <div class="ddg"></div>
+      <div class="bing"></div>
+    </div>
+    <script>
+      let ddgLoaded = false;
+      let bingLoaded = false;
+
+      function checkAllLoaded() {
+        if (ddgLoaded && bingLoaded) {
+          document.getElementById("loading-indicator").style.display = "none";
+          document.getElementById("results-container").style.display = "flex";
+          loadLazyImages();
+        }
+      }
+
+      function loadLazyImages() {
+        const lazyImages = document.querySelectorAll("img[data-src]");
+        lazyImages.forEach((img) => {
+          img.src = img.getAttribute("data-src");
+          img.removeAttribute("data-src");
+        });
+      }
+
+      async function loadResults() {
+        const query = new URLSearchParams(window.location.search).get("q");
+
+        // Charger DDG
+        fetch(`/api/search/ddg?q=${encodeURIComponent(query)}`)
+          .then((res) => res.json())
+          .then((data) => {
+            renderDDGResults(data);
+            ddgLoaded = true;
+            checkAllLoaded();
+          })
+          .catch((err) => {
+            console.error("Erreur DDG:", err);
+            ddgLoaded = true;
+            checkAllLoaded();
+          });
+
+        // Charger Bing
+        fetch(`/api/search/bing?q=${encodeURIComponent(query)}`)
+          .then((res) => res.json())
+          .then((data) => {
+            renderBingResults(data);
+            bingLoaded = true;
+            checkAllLoaded();
+          })
+          .catch((err) => {
+            console.error("Erreur Bing:", err);
+            bingLoaded = true;
+            checkAllLoaded();
+          });
+      }
+
+      function renderDDGResults(results) {
+        const container = document.querySelector(".ddg");
+        results.forEach((r) => {
+          const article = document.createElement("article");
+          article.innerHTML = `
+            <h2 title="${r[4]}">
+              <div class="icon-wrapper">
+                <img alt="icon" data-src="${r[3]}" width="30px" loading="lazy" class="lazy-logo">
+              </div>
+              <a target="_blank" class="title" href="${r[1]}">${r[0]}</a>
+            </h2>
+            <div class="description">
+              <a target="_blank" class="description" href="${r[1]}">${r[2]}</a>
+            </div>
+          `;
+          container.appendChild(article);
+        });
+      }
+
+      function renderBingResults(results) {
+        const container = document.querySelector(".bing");
+        results.forEach((r) => {
+          const article = document.createElement("article");
+          article.innerHTML = `
+            <h2 title="${r[4]}">
+              <div class="icon-wrapper">
+                <img alt="icon" data-src="${r[3]}" width="30px" loading="lazy" class="lazy-logo">
+              </div>
+              <a target="_blank" class="title" href="${r[1]}">${r[0]}</a>
+            </h2>
+            <div class="description">
+              <a target="_blank" class="description" href="${r[1]}">${r[2]}</a>
+            </div>
+          `;
+          container.appendChild(article);
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", loadResults);
+    </script>
   </body>
 </html>

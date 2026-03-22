@@ -99,10 +99,6 @@ a.description {
   padding-left: 150px;
 }
 
-.index {
-  display: flex;
-}
-
 .header {
   display: flex;
   align-items: center;
@@ -117,6 +113,29 @@ a.description {
 
 i.fa-magnifying-glass:hover {
   cursor: pointer;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 body[data-theme="dark"] {

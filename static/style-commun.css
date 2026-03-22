@@ -122,17 +122,20 @@ body[data-theme="light"] {
 }
 
 .settings {
+  display: inline-block;
+  vertical-align: middle;
   transition: transform 300ms;
+  transform-origin: center center;
+}
+
+.settings:active,
+.settings:hover {
+  transform: rotate(45deg) translateX(-4px) translateY(-9px);
 }
 
 * {
   transition: color 300ms;
   transition: background-color 300ms;
-}
-
-.settings:active,
-.settings:hover {
-  transform: translateY(-15px) translateX(15px) rotate(90deg);
 }
 
 .param:hover {

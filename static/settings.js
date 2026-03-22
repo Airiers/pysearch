@@ -6,23 +6,10 @@ function loadSettings() {
       linkTarget: "_blank",
     };
 
-    // Appliquer le thème
     document.body.setAttribute("data-theme", settings.theme);
     document.querySelector("#theme").textContent =
       settings.theme === "dark" ? "Thème sombre" : "Thème clair";
 
-    // Appliquer le comportement des liens
-    const articles = document.querySelectorAll("article");
-    for (const article of articles) {
-      const links = article.querySelectorAll("a");
-      for (const link of links) {
-        if (settings.linkTarget === "_blank") {
-          link.target = "_blank";
-        } else {
-          link.removeAttribute("target");
-        }
-      }
-    }
     document.querySelector("#linkto").textContent =
       settings.linkTarget === "_blank" ? "Nouvel onglet" : "Remplacer l'onglet";
   } catch (error) {
@@ -30,7 +17,6 @@ function loadSettings() {
   }
 }
 
-// Sauvegarder les paramètres
 function saveSettings() {
   const currentTheme = document.body.getAttribute("data-theme") || "light";
   const currentLinkTarget = document.querySelector("article a")?.target || "";
@@ -43,7 +29,6 @@ function saveSettings() {
   localStorage.setItem("settings", JSON.stringify(settings));
 }
 
-// Charger au démarrage
 loadSettings();
 
 const settingsBtn = document.querySelector(".settings");
@@ -75,12 +60,11 @@ themeBtn.addEventListener("click", () => {
   saveSettings();
 });
 
-const articles = document.querySelectorAll("article");
 const linktoBtn = document.querySelector(".linkto");
 
 linktoBtn.addEventListener("click", () => {
+  const articles = document.querySelectorAll("article");
   for (const article of articles) {
-    console.log(article);
     const links = article.querySelectorAll("a");
     for (const link of links) {
       if (link.target === "_blank") {
@@ -94,3 +78,5 @@ linktoBtn.addEventListener("click", () => {
   }
   saveSettings();
 });
+
+// Retirer cette partie qui cache/affiche - laisse le script dans result.html gérer ça

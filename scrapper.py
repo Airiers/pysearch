@@ -7,6 +7,7 @@ import feedparser
 import re
 import spacy
 import httpx
+import asyncio
 
 def slice_result(result):
     MAX_LEN = 50
@@ -17,7 +18,7 @@ def slice_result(result):
         result = cut + "..."
     return result
 
-async def scrap_async(q):
+async def scrap_async_ddg(q):
     url = f"https://html.duckduckgo.com/html/?q={q}"
     headers = {"User-Agent": "Mozilla/5.0"}
 

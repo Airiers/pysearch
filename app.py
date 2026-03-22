@@ -4,7 +4,7 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, render_template, request
 from flask_caching import Cache
-from scrapper import scrap_async
+from scrapper import scrap_async_ddg
 from scrapper import bdm_rss
 from scrapper import citron_rss
 from scrapper import korben_rss
@@ -36,7 +36,7 @@ def get_bing_image():
     return img_url
 
 def scrap_cached(search):
-    return scrap_async(search)
+    return scrap_async_ddg(search)
 
 @cache.cached(timeout=300, key_prefix='articles') # Cache 5 minutes
 def get_all_articles():

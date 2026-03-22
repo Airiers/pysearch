@@ -7,7 +7,7 @@ import feedparser
 import re
 import spacy
 import httpx
-import asyncio
+import base64
 
 def slice_result(result):
     MAX_LEN = 50
@@ -38,7 +38,6 @@ async def scrap_async_ddg(q):
         title = title_tag.text.strip()
         link = title_tag["href"]
 
-
         if "duckduckgo.com/l/" in link:
             try:
                 parsed = urlparse(link)
@@ -52,6 +51,67 @@ async def scrap_async_ddg(q):
         logo = f"https://icons.duckduckgo.com/ip3/{domain}.ico"
         fulltitle = title
         result_list.append([slice_result(title), link, description, logo, fulltitle])
+
+    return result_list
+
+def extract_real_url(bing_url):
+    parsed = urlparse(bing_url)
+    query = parse_qs(parsed.query)
+
+    if "u" not in query:
+        return bing_url
+
+    encoded = query["u"][0]
+
+    if encoded.startswith("a1"):
+        encoded = encoded[2:]
+
+    # corriger le padding base64
+    missing_padding = len(encoded) % 4
+    if missing_padding:
+        encoded += "=" * (4 - missing_padding)
+
+    try:
+        decoded = base64.b64decode(encoded).decode("utf-8")
+        return decoded
+    except Exception:
+        return bing_url
+
+async def scrap_async_bing(q):
+    url = f"https://www.bing.com/search?q={q}"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    async with httpx.AsyncClient(timeout=5) as client:
+        r = await client.get(url, headers=headers)
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "html.parser")
+
+    result_list = []
+
+    for r in soup.select("li.b_algo"):
+        title = r.find("h2")
+        link = r.find("a")
+        description = r.find("p")
+
+        if not title or not link:
+            continue
+
+        title_text = title.get_text()
+        link_href = extract_real_url(link.get("href"))
+        description_text = description.get_text() if description else ""
+
+        domain = urlparse(link_href).netloc
+        logo = f"https://icons.duckduckgo.com/ip3/{domain}.ico"
+
+        fulltitle = title_text
+
+        result_list.append([
+            slice_result(title_text),
+            link_href,
+            description_text,
+            logo,
+            fulltitle
+        ])
 
     return result_list
 

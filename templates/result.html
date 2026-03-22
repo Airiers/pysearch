@@ -29,6 +29,16 @@
       src="{{ url_for('static', filename='claude.js') }}"
       defer
     ></script>
+    <style>
+      article {
+        width: 720px;
+      }
+      .main {
+        margin-left: -150px;
+        display: flex;
+        justify-content: center;
+      }
+    </style>
   </head>
   <body data-theme="dark">
     <div class="head">
@@ -94,30 +104,57 @@
         </ul>
       </div>
     </div>
-    <div class="main">
-      {% for result in results %}
-      <article>
-        <h2 title="{{ result[4] }}">
-          <div class="icon-wrapper">
-            <img
-              alt="icon"
-              data-src="{{ result[3] }}"
-              width="30px"
-              loading="lazy"
-              class="lazy-logo"
-            />
+    <div class="main index">
+      <div class="ddg">
+        {% for result in results_ddg %}
+        <article>
+          <h2 title="{{ result[4] }}">
+            <div class="icon-wrapper">
+              <img
+                alt="icon"
+                data-src="{{ result[3] }}"
+                width="30px"
+                loading="lazy"
+                class="lazy-logo"
+              />
+            </div>
+            <a target="_blank" class="title" href="{{ result[1] }}"
+              >{{ result[0] }}</a
+            >
+          </h2>
+          <div class="description">
+            <a target="_blank" class="description" href="{{ result[1] }}"
+              >{{ result[2] }}</a
+            >
           </div>
-          <a target="_blank" class="title" href="{{ result[1] }}"
-            >{{ result[0] }}</a
-          >
-        </h2>
-        <div class="description">
-          <a target="_blank" class="description" href="{{ result[1] }}"
-            >{{ result[2] }}</a
-          >
-        </div>
-      </article>
-      {% endfor %}
+        </article>
+        {% endfor %}
+      </div>
+      <div class="bing">
+        {% for result in results_bing %}
+        <article>
+          <h2 title="{{ result[4] }}">
+            <div class="icon-wrapper">
+              <img
+                alt="icon"
+                data-src="{{ result[3] }}"
+                width="30px"
+                loading="lazy"
+                class="lazy-logo"
+              />
+            </div>
+            <a target="_blank" class="title" href="{{ result[1] }}"
+              >{{ result[0] }}</a
+            >
+          </h2>
+          <div class="description">
+            <a target="_blank" class="description" href="{{ result[1] }}"
+              >{{ result[2] }}</a
+            >
+          </div>
+        </article>
+        {% endfor %}
+      </div>
     </div>
   </body>
 </html>

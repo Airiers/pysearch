@@ -99,6 +99,10 @@ a.description {
   padding-left: 150px;
 }
 
+.index {
+  display: flex;
+}
+
 .header {
   display: flex;
   align-items: center;

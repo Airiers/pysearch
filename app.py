@@ -1,10 +1,10 @@
 import requests
 import random
-import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, render_template, request
 from flask_caching import Cache
 from scrapper import scrap_async_ddg
+from scrapper import scrap_async_bing
 from scrapper import bdm_rss
 from scrapper import citron_rss
 from scrapper import korben_rss
@@ -35,8 +35,11 @@ def get_bing_image():
     img_url = "https://www.bing.com" + rel_url
     return img_url
 
-def scrap_cached(search):
-    return scrap_async_ddg(search)
+async  def scrap_cached_ddg(search):
+    return await scrap_async_ddg(search)
+
+async def scrap_cached_bing(search):
+    return await scrap_async_bing(search)
 
 @cache.cached(timeout=300, key_prefix='articles') # Cache 5 minutes
 def get_all_articles():
@@ -58,10 +61,9 @@ async def recevoir():
     if request.method == "GET":
         # search = request.form["q"] # ? POST METHOD
         search = request.args.get("q") # ? GET METHOD
-        results = await scrap_cached(search)
-    else:
-        results = []
-    return render_template("result.html", results=results, value=search)
+        results_ddg = await scrap_cached_ddg(search)
+        results_bing = await scrap_cached_bing(search)
+    return render_template("result.html", results_ddg=results_ddg, results_bing=results_bing, value=search)
 @app.route("/images", methods=["GET"])
 def recevoir_images():
     if request.method == "GET":

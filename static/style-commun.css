@@ -1,9 +1,62 @@
+:root {
+  --darktitlecolor: #a6c8f3;
+  --lighttitlecolor: #5b6e87;
+  --darktextcolor: #d1d1d1;
+  --lighttextcolor: #1b1b1b;
+  --darkbackgroundcolor: #1a1b26;
+  --lightbackgroundcolor: #ebebeb;
+  --darkbuttoncolor: #414141;
+  --lightbuttoncolor: #b0b0b0;
+}
+
 .header {
   display: flex;
   align-items: center;
   text-align: center;
   padding-top: 20px;
   padding-left: 35px;
+}
+
+.settings {
+  padding-left: 30px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.param {
+  cursor: pointer;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  padding: 20px;
+  margin: 15% auto;
+  width: 300px;
+  border-radius: 8px;
+}
+
+.param {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
 }
 
 .head {
@@ -19,18 +72,76 @@
   padding-left: 150px;
 }
 
-a.lien {
-  color: var(--buttoncolor);
-}
-
 a.lien.active,
 a.lien:hover {
-  color: var(--textcolor);
   text-decoration: underline;
   text-decoration-thickness: 3px;
   text-underline-offset: 8px;
 }
 
-.head {
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+body[data-theme="dark"] {
+  a.lien.active,
+  a.lien:hover {
+    color: var(--darktextcolor);
+  }
+  .head {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  }
+
+  a.lien {
+    color: var(--darkbuttoncolor);
+  }
+  .settings {
+    color: var(--darktextcolor);
+  }
+  .modal-content {
+    background: var(--darkbackgroundcolor);
+    color: var(--darktextcolor);
+  }
+}
+
+body[data-theme="light"] {
+  a.lien.active,
+  a.lien:hover {
+    color: var(--lighttextcolor);
+  }
+  .head {
+    border-bottom: 2px solid rgb(0, 0, 0, 0.1);
+  }
+
+  a.lien {
+    color: var(--lightbuttoncolor);
+  }
+  .settings {
+    color: var(--lighttextcolor);
+  }
+  .modal-content {
+    background: var(--lightbackgroundcolor);
+    color: var(--lighttextcolor);
+  }
+}
+
+.settings {
+  transition: transform 300ms;
+}
+
+* {
+  transition: color 300ms;
+  transition: background-color 300ms;
+}
+
+.settings:active,
+.settings:hover {
+  transform: translateY(-15px) translateX(15px) rotate(90deg);
+}
+
+.param:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+.param:active {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal h2 {
+  margin-bottom: 5px;
 }

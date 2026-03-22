@@ -1,31 +1,37 @@
-import feedparser
+import spacy
+import re
 
-def slice_result(result):
-    MAX_LEN = 50
-    result = result.strip()
-    if len(result) > MAX_LEN:
-        cut = result[:MAX_LEN]
-        cut = cut.rsplit(" ", 1)[0]
-        result = cut + "..."
-    return result
+texte = "Actualités : OpenAI veut bâtir son propre GitHub, et ce n'est pas anodin"
+texte2 = "Royaume-Uni : une controverse autour du projet de loi sur l’IA et le copyright"
 
-def google_news(q):
-    feed = feedparser.parse(
-        f"https://news.google.com/rss/search?q={q}&hl=fr&gl=FR&ceid=FR:fr"
-    )
+nlp = spacy.load("fr_core_news_sm")
 
-    results = []
+stopwords = {
+    "être","avoir","faire","dire","aller",
+    "probablement","encore","déjà","fini",
+    "autour","contre","avec","sans"
+}
 
-    for e in feed.entries[:20]:
-        results.append([
-            slice_result(e.title),
-            e.link,
-            e.title,
-            e.published,
-            ""
-        ])
+def expand(title):
 
-    return results
+    # enlever citations et ponctuation forte
+    title = re.sub(r"«.*?»", "", title)
+    title = title.replace("Actualités :", "")
 
-news = google_news("grafikart")
-print(news[0])
+    doc = nlp(title)
+
+    keywords = []
+
+    for token in doc:
+
+        if (
+            token.pos_ in ["PROPN","NOUN"]  # noms propres ou noms
+            and token.lemma_.lower() not in stopwords
+            and len(token.text) > 2
+        ):
+            keywords.append(token.text)
+
+    return " ".join(keywords[:5])
+
+print(expand(texte))
+print(expand(texte2))

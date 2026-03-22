@@ -15,6 +15,11 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <script
+      type="module"
+      src="{{ url_for('static', filename='claude.js') }}"
+      defer
+    ></script>
   </head>
   <body>
     <style>
@@ -22,7 +27,7 @@
         background-image: url("{{ image }}");
         background-size: cover;
         background-repeat: no-repeat;
-	overflow:hidden;
+        background-attachment: fixed;
       }
     </style>
     <div class="search">
@@ -41,25 +46,40 @@
           value="{{value}}"
           type="text"
           name="q"
+          id="query"
           placeholder="Rechercher..."
         />
-        <button type="submit">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
+        <div class="searches">
+          <button type="submit">
+            <i title="Rechercher" class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <button type="button" id="claude">
+            <img
+              title="Rechercher avec Claude"
+              src="{{ url_for('static', filename='claude.svg') }}"
+              alt="Claude Logo"
+              width="20px"
+              style="cursor: pointer"
+            />
+          </button>
+        </div>
       </form>
     </div>
     <div class="actu">
-      <div class="bdm">
-        {% for abdm in bdm %}
+      <div class="articles">
+        {% for a in articles %}
         <article>
-          <a
-            target="_blank"
-            class="infos"
-            href="{{abdm[1]}}"
-            title="{{abdm[2]}}"
-          >
-            <img class="preview" src="{{abdm[3]}}" alt="{{abdm[0]}}" />
-            <h2 class="title">{{abdm[0]}}</h2>
+          <a target="_blank" class="infos" href="{{a[1]}}" title="{{a[2]}}">
+            <div class="preview">
+              <img src="{{a[3]}}" alt="{{a[0]}}" loading="lazy" />
+            </div>
+            <h2 class="title">{{a[0]}}</h2>
+            <div
+              class="expand-link"
+              onclick="window.open(`http://192.168.1.17:8042/sources?q={{a[2]}}`, `_blank`)"
+            >
+              Développer le sujet
+            </div>
           </a>
         </article>
         {% endfor %}

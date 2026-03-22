@@ -47,8 +47,17 @@
         box-shadow: 0 0 20px black;
       }
     </style>
+    <script
+      src="{{ url_for('static', filename='settings.js') }}"
+      defer
+    ></script>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='claude.js') }}"
+      defer
+    ></script>
   </head>
-  <body>
+  <body data-theme="dark">
     <div class="head">
       <div class="header">
         <a href="/">
@@ -58,18 +67,45 @@
             alt="Python Logo"
             width="80px"
         /></a>
-        <form method="GET" class="searchbar">
+        <form action="/search" method="GET" class="searchbar">
           <input
             autocomplete="off"
             value="{{value}}"
             type="text"
             name="q"
+            id="query"
             placeholder="Rechercher..."
           />
-          <button type="submit">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+          <div class="searches">
+            <button type="submit">
+              <i title="Rechercher" class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button type="button" id="claude">
+              <img
+                title="Rechercher avec Claude"
+                src="{{ url_for('static', filename='claude.svg') }}"
+                alt="Claude Logo"
+                width="20px"
+                style="cursor: pointer"
+              />
+            </button>
+          </div>
         </form>
+        <i class="fa-solid fa-gear settings"></i>
+        <div class="modal" id="settingsModal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Paramètres</h2>
+            <div class="param theme">
+              <i class="fa-solid fa-sun"></i>
+              <p id="theme">Thème sombre</p>
+            </div>
+            <div class="param linkto">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              <p id="linkto">Nouvel onglet</p>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="mode">
         <ul>

@@ -1,13 +1,24 @@
 :root {
-  --titlecolor: #a6c8f3;
-  --textcolor: #d1d1d1;
-  --backgroundcolor: #1a1b26;
-  --buttoncolor: #414141;
+  --darktitlecolor: #a6c8f3;
+  --lighttitlecolor: #5b6e87;
+  --darktextcolor: #d1d1d1;
+  --lighttextcolor: #1b1b1b;
+  --darkbackgroundcolor: #1a1b26;
+  --lightbackgroundcolor: #ebebeb;
+  --darkbuttoncolor: #414141;
+  --lightbuttoncolor: #b0b0b0;
 }
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color: var(--backgroundcolor);
+}
+
+body[data-theme="dark"] {
+  background-color: var(--darkbackgroundcolor);
+}
+
+body[data-theme="light"] {
+  background-color: var(--lightbackgroundcolor);
 }
 
 article {
@@ -33,7 +44,6 @@ a {
 }
 
 a.title {
-  color: var(--titlecolor);
   font-weight: 500;
 }
 
@@ -42,7 +52,6 @@ a.title:hover {
 }
 
 a.description {
-  color: var(--textcolor);
   font-weight: 300;
 }
 
@@ -66,15 +75,19 @@ a.description {
   border-radius: 25px;
   height: 50px;
   width: 800px;
-  background-color: var(--buttoncolor);
   display: grid;
   grid-template-columns: 90% 10%;
   overflow: hidden;
   padding-left: 20px;
 }
 
+.searches {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
+}
+
 .searchbar * {
-  color: var(--textcolor);
   font-size: 16px;
   background-color: transparent;
   border: 0;
@@ -100,4 +113,36 @@ a.description {
 
 i.fa-magnifying-glass:hover {
   cursor: pointer;
+}
+
+body[data-theme="dark"] {
+  a,
+  a.description {
+    color: var(--darktextcolor);
+  }
+  a.title {
+    color: var(--darktitlecolor);
+  }
+  .searchbar {
+    background-color: var(--darkbuttoncolor);
+  }
+  .searchbar * {
+    color: var(--darktextcolor);
+  }
+}
+
+body[data-theme="light"] {
+  a,
+  a.description {
+    color: var(--lighttextcolor);
+  }
+  a.title {
+    color: var(--lighttitlecolor);
+  }
+  .searchbar {
+    background-color: var(--lightbuttoncolor);
+  }
+  .searchbar * {
+    color: var(--lighttextcolor);
+  }
 }

@@ -1,9 +1,12 @@
 :root {
-  --titlecolor: #a6c8f3;
-  --textcolor: #d1d1d1;
-  --backgroundcolor: #1a1b26;
-  --buttoncolor: #414141;
-  --hoverbuttoncolor: #222222;
+  --darktitlecolor: #a6c8f3;
+  --lighttitlecolor: #5b6e87;
+  --darktextcolor: #d1d1d1;
+  --lighttextcolor: #1b1b1b;
+  --darkbackgroundcolor: #1a1b26;
+  --lightbackgroundcolor: #ebebeb;
+  --darkbuttoncolor: #414141;
+  --lightbuttoncolor: #b0b0b0;
 }
 
 body {
@@ -121,4 +124,44 @@ article img {
 
 i.fa-magnifying-glass:hover {
   cursor: pointer;
+}
+
+body[data-theme="dark"] {
+  background-color: var(--darkbackgroundcolor);
+}
+
+body[data-theme="light"] {
+  background-color: var(--lightbackgroundcolor);
+}
+
+body[data-theme="dark"] {
+  a,
+  a.description {
+    color: var(--darktextcolor);
+  }
+  a.title {
+    color: var(--darktitlecolor);
+  }
+  .searchbar {
+    background-color: var(--darkbuttoncolor);
+  }
+  .searchbar * {
+    color: var(--darktextcolor);
+  }
+}
+
+body[data-theme="light"] {
+  a,
+  a.description {
+    color: var(--lighttextcolor);
+  }
+  a.title {
+    color: var(--lighttitlecolor);
+  }
+  .searchbar {
+    background-color: var(--lightbuttoncolor);
+  }
+  .searchbar * {
+    color: var(--lighttextcolor);
+  }
 }
